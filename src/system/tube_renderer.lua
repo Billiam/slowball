@@ -1,6 +1,8 @@
 local tiny = require('vendor.tiny')
 
 local TubeRenderer = tiny.processingSystem()
+TubeRenderer.drawable = true
+
 TubeRenderer.filter = tiny.requireAll('tube', 'height', 'radius', 'position', 'color', 'line_width')
 
 function TubeRenderer.compare(e1, e2)

@@ -6,6 +6,9 @@ local Resource = require('resource')
 
 local world
 
+local update_filter = tiny.rejectAny('drawable')
+local render_filter = tiny.requireAll('drawable')
+
 local function initController()
   Resource.system.controllable:init()
 end
@@ -37,7 +40,7 @@ function Game.setup()
   
     Resource.system.kicking,
   
-    Resource.system.round_renderer,
+    Resource.system.tube_renderer,
     Resource.entity.ball(600, 500),
     Resource.entity.player(1, 200, 200)
   )
@@ -45,6 +48,7 @@ end
 
 function Game.update(dt)
   tactile.updateButtons()
+  world:update(dt, update_filter)
 end
 
 function Game.keypressed(key)
@@ -55,7 +59,7 @@ end
 
 function Game.draw()
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
-  world:update(love.timer.getDelta())
+  world:update(love.timer.getDelta(), render_filter)
 end
 
 return Game
