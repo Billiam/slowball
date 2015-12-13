@@ -1,7 +1,7 @@
 local Vector = require('vendor.vector')
 
 local Ball = function(x, y, speed, angle)
-  return {
+  local ball = {
     position = Vector(x, y),
     velocity = Vector.fromAngle(angle or 0, speed or 0),
     mass = 3,
@@ -20,6 +20,11 @@ local Ball = function(x, y, speed, angle)
     height = 64,
     collider = 'circle'
   }
+  
+  ball.previous_position = ball.position:clone()
+  ball.lerp_position = ball.position:clone()
+  
+  return ball
 end
 
 return Ball

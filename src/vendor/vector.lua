@@ -186,6 +186,11 @@ function vector:trimmed(maxLen)
 end
 
 
+-- Added 12/12 - Author: Billiam
+function vector:lerp(other, amount)
+  return self + (other - self) * amount
+end
+
 -- the module
 return setmetatable({new = new, isvector = isvector, zero = zero},
   {__call = function(_, ...) return new(...) end})

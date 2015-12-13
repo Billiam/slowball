@@ -32,6 +32,8 @@ end
 
 function Game.setup()
   world = tiny.world(
+    Resource.system.state_cache,
+
     Resource.system.slow_emitter,
     Resource.system.friction,
     Resource.system.controllable,
@@ -39,8 +41,11 @@ function Game.setup()
     Resource.system.collidable,
   
     Resource.system.kicking,
+    
+    Resource.system.lerper,
   
     Resource.system.tube_renderer,
+  
     Resource.entity.ball(600, 500),
     Resource.entity.player(1, 200, 200)
   )
@@ -57,8 +62,9 @@ function Game.keypressed(key)
   end
 end
 
-function Game.draw()
+function Game.draw(lerp_amount)
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+  world.lerp_amount = lerp_amount
   world:update(love.timer.getDelta(), render_filter)
 end
 

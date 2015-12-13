@@ -3,14 +3,14 @@ local tiny = require('vendor.tiny')
 local TubeRenderer = tiny.processingSystem()
 TubeRenderer.drawable = true
 
-TubeRenderer.filter = tiny.requireAll('tube', 'height', 'radius', 'position', 'color', 'line_width')
+TubeRenderer.filter = tiny.requireAll('tube', 'height', 'radius', 'lerp_position', 'color', 'line_width')
 
 function TubeRenderer.compare(e1, e2)
-  return e1.position.y < e2.position.y
+  return e1.lerp_position.y < e2.lerp_position.y
 end
 
 function TubeRenderer:process(e, dt)
-  self:render(e, dt)
+  self:render(e, dt, self.world.lerp_amount)
 end
 
 function TubeRenderer:preProcess()
@@ -27,32 +27,32 @@ function TubeRenderer:render(e, dt)
   
   --shadow
   love.graphics.setStencil(function()
-    love.graphics.circle("fill", e.position.x, e.position.y, e.radius, math.sqrt(e.radius) * 5)
-    love.graphics.circle("fill", e.position.x, e.position.y + e.height * 0.7, e.radius, math.sqrt(e.radius) * 5)
-    love.graphics.rectangle("fill", e.position.x - e.radius, e.position.y, e.radius * 2, e.height * 0.7)
+    love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y, e.radius, math.sqrt(e.radius) * 5)
+    love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y + e.height * 0.7, e.radius, math.sqrt(e.radius) * 5)
+    love.graphics.rectangle("fill", e.lerp_position.x - e.radius, e.lerp_position.y, e.radius * 2, e.height * 0.7)
   end)
   love.graphics.setColor(0, 0, 0, 50)
-  love.graphics.rectangle("fill", e.position.x - e.radius, e.position.y - e.radius, e.radius * 2, e.height * 0.7 + e.radius * 2)
+  love.graphics.rectangle("fill", e.lerp_position.x - e.radius, e.lerp_position.y - e.radius, e.radius * 2, e.height * 0.7 + e.radius * 2)
   
   --back wall
   love.graphics.setColor(200, 200, 200, 200)
   love.graphics.setInvertedStencil(function()
-    love.graphics.circle("fill", e.position.x, e.position.y, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
+    love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
   end)
-  love.graphics.circle("fill", e.position.x, e.position.y - e.height, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
+  love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y - e.height, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
   love.graphics.setStencil()
 
   --bottom
   love.graphics.setInvertedStencil(function()
-    love.graphics.circle("fill", e.position.x, e.position.y - e.height, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
+    love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y - e.height, e.radius - e.line_width, math.sqrt(e.radius - e.line_width) * 5)
   end)
   love.graphics.setColor(220, 220, 220, 200)
-  love.graphics.arc("fill", e.position.x, e.position.y, e.radius, 0, math.pi,  math.sqrt(e.radius) * 2.5)
+  love.graphics.arc("fill", e.lerp_position.x, e.lerp_position.y, e.radius, 0, math.pi,  math.sqrt(e.radius) * 2.5)
 
   -- top
-  love.graphics.rectangle("fill", e.position.x - e.radius, e.position.y - e.height, e.radius * 2, e.height)
+  love.graphics.rectangle("fill", e.lerp_position.x - e.radius, e.lerp_position.y - e.height, e.radius * 2, e.height)
   love.graphics.setColor(255, 255, 255, 255)
-  love.graphics.circle("fill", e.position.x, e.position.y - e.height, e.radius, math.sqrt(e.radius) * 5)
+  love.graphics.circle("fill", e.lerp_position.x, e.lerp_position.y - e.height, e.radius, math.sqrt(e.radius) * 5)
 
   love.graphics.setStencil()
   love.graphics.pop()

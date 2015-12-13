@@ -1,7 +1,7 @@
 local Vector = require('vendor.vector')
 
 local Player = function(id, x, y, speed, angle)
-  return {
+  local player = {
     player_id = id or 1,
     position = Vector(x, y),
     velocity = Vector.fromAngle(angle or 0, speed or 0),
@@ -19,13 +19,19 @@ local Player = function(id, x, y, speed, angle)
 --    slowable = true,
     max_speed = 640,
     
-    kick_force = 300,
+    kick_force = 600,
     kick_distance = 10,
     
     tube = true,
     height = 8,
-    collider = 'circle'
+    collider = 'circle',
+    slowable = true
   }
+
+  player.previous_position = player.position:clone()
+  player.lerp_position = player.position:clone()
+  
+  return player
 end
 
 return Player

@@ -23,7 +23,6 @@ function love.load(arg)
   State.switch(Resource.state.game)
 end
 
-
 function love.run()
   if love.math then
     love.math.setRandomSeed(os.time())
@@ -40,7 +39,9 @@ function love.run()
   if love.timer then love.timer.step() end
 
   local dt = 0
-
+  
+  local lerp_amount = 0
+  
   -- Main loop time.
   while true do
     -- Process events.
@@ -76,7 +77,10 @@ function love.run()
     if love.window and love.graphics and love.window.isCreated() then
       love.graphics.clear()
       love.graphics.origin()
-      if love.draw then love.draw() end
+      if love.draw then
+        lerp_amount = accumulator / update_rate
+        love.draw(lerp_amount)
+      end
       love.graphics.present()
     end
 
@@ -88,16 +92,8 @@ function love.update(dt)
   State.current().update(dt)
 end
 
-function love.draw()
-  State.current().draw()
-end
-
-function love.joystickreleased(joystick, button)
-  State.current().joystickreleased(joystick, button)
-end
-
-function love.joystickpressed(joystick, button)
-  State.current().joystickpressed(joystick, button)
+function love.draw(lerp_amount)
+  State.current().draw(lerp_amount)
 end
 
 function love.keypressed(key)
